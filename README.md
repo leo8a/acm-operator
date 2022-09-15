@@ -8,9 +8,11 @@ Installs the [ACM](https://github.com/stolostron/deploy#deploy-the-open-cluster-
 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
-    acm_operator_namespace: "open-cluster-management"
-    metal3:
-        watch_all_namespaces: true
+    acm:
+      operator_namespace: "open-cluster-management"
+
+    acm_metal3:
+      watch_all_namespaces: true
 
 ## Dependencies
 
@@ -30,8 +32,7 @@ To enable BMO to watch resources in all namespaces, the `watch_all_namespaces` v
       roles:
         - leo8a.acm_operator
       vars:
-        - catalog_source: "redhat-operator-index"
-        - metal3:
+        - acm_metal3:
             watch_all_namespaces: true
 
 ## License

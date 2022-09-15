@@ -1,5 +1,9 @@
 ---
-acm_operator_namespace: "open-cluster-management"
+acm:
+  operator_namespace: "open-cluster-management"
 
-metal3:
-  watch_all_namespaces: true
+acm_metal3:
+  watch_all_namespaces: yes
+
+acm_ais:
+  enable_agent_service_config: yes

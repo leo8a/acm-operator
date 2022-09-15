@@ -9,3 +9,4 @@
 
 ## Configure and check AIS
 - include_tasks: configure-ais.yaml
+  when: acm_ais['enable_agent_service_config'] is true
