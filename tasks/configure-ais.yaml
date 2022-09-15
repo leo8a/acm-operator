@@ -1,0 +1,19 @@
+---
+- name: Configure the AIS
+  k8s:
+    state: present
+    template: "05_AgentServiceConfig.yaml.j2"
+    wait: true
+
+- name: Check the AgentServiceConfig CR (timeout ~20 mins)    # AIS pod that handles the spoke cluster deployments
+  k8s:
+    api_version: agent-install.openshift.io/v1beta1
+    kind: AgentServiceConfig
+    name: agent
+    namespace: open-cluster-management
+    wait: true
+    wait_timeout: 1200
+    wait_condition:
+      type: ReconcileCompleted
+      status: "True"
+      reason: ReconcileSucceeded

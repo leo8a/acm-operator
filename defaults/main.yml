@@ -1,0 +1,5 @@
+---
+acm_operator_namespace: "open-cluster-management"
+
+metal3:
+  watch_all_namespaces: true

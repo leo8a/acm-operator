@@ -1,0 +1,11 @@
+---
+# Install, check, and configure ACM operator
+- include_tasks: install-acm.yml
+- include_tasks: install-mch.yml
+
+# Configure BMO
+- include_tasks: configure-bmo.yml
+  when: metal3['watch_all_namespaces'] is true
+
+## Configure and check AIS
+- include_tasks: configure-ais.yaml

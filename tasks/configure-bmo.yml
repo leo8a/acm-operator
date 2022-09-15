@@ -1,0 +1,6 @@
+---
+- name: Patch Provisioning resource to allow BMO watching all namespaces
+  k8s:
+    state: present
+    template: "04_Provisioning.yaml.j2"
+    wait: true

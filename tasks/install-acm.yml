@@ -1,0 +1,47 @@
+---
+- name: Get ACM info from PackageManifest
+  k8s_info:
+    api_version: packages.operators.coreos.com/v1
+    kind: PackageManifest
+    name: advanced-cluster-management
+    namespace: open-cluster-management
+  register: acm_object
+
+- name: Set defaultChannel and catalogSource
+  set_fact:
+    operator_channel: "{{ acm_object.resources | json_query('[0].status.defaultChannel') }}"
+    catalog_source: "{{ acm_object.resources | json_query('[0].status.catalogSource') }}"
+
+- name: Create OLM objects for ACM operator
+  k8s:
+    state: present
+    template: "{{ item }}"
+    wait: true
+  loop:
+    - "00_Namespace.yaml.j2"
+    - "01_OperatorGroup.yaml.j2"
+    - "02_Subscription.yaml.j2"
+
+- name: Check ACM operator group (timeout - 20 mins)
+  k8s:
+    api_version: operators.coreos.com/v1
+    kind: OperatorGroup
+    name: open-cluster-management
+    namespace: open-cluster-management
+    state: present
+    wait: true
+    wait_timeout: 1200
+
+- name: Check ACM subscription (timeout - 20 mins)
+  k8s:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    name: advanced-cluster-management
+    namespace: open-cluster-management
+    state: present
+    wait: true
+    wait_timeout: 1200
+    wait_condition:
+      type: CatalogSourcesUnhealthy
+      status: "False"
+      reason: AllCatalogSourcesHealthy
